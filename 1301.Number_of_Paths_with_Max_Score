@@ -1,0 +1,53 @@
+class Solution:
+    def pathsWithMaxScore(self, board):
+        def inBounds(i, j):
+            return 0 <= i < len(board) and 0 <= j < len(board)
+ 
+        def get(c):
+            return int(c) if c != 'S' else 0
+ 
+        def isValid(i, j):
+            return inBounds(i, j) and board[i][j] != 'X'
+ 
+        def helper(i, j):
+            if board[i][j] == 'E':
+                return 0, 1
+            if board[i][j] == 'X':
+                return 0, 0
+ 
+            if (i, j) in memo:
+                return memo[(i, j)]
+ 
+            s1, count1, s2, count2, s3, count3 = 0, 0, 0, 0, 0, 0
+            c = board[i][j]
+ 
+            if isValid(i - 1, j):  # go left
+                s1, count1 = helper(i - 1, j)
+                if count1 > 0:
+                    s1 += get(c)
+ 
+            if isValid(i, j - 1):  # go up
+                s2, count2 = helper(i, j - 1)
+                if count2 > 0:
+                    s2 += get(c)
+ 
+            if isValid(i - 1, j - 1):  # go up-left
+                s3, count3 = helper(i - 1, j - 1)
+                if count3 > 0:
+                    s3 += get(c)
+ 
+            if s1 == s2 and s2 == s3:
+                s, count = s1, count1 + count2 + count3
+            elif s1 == s2:
+                s, count = max((s1, (count1 + count2)), (s3, count3))
+            elif s2 == s3:
+                s, count = max((s2, (count2 + count3)), (s1, count1))
+            else:
+                s, count = max((s1, count1), (s2, count2), (s3, count3))
+ 
+            memo[(i, j)] = s, count % mod
+            return memo[(i, j)]
+ 
+        memo = {}
+        mod = 10 ** 9 + 7
+        return helper(len(board) - 1, len(board) - 1)
