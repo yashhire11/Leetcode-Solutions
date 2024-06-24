@@ -1,0 +1,49 @@
+public class Solution {
+    public IList<int> GrayCode(int n) {
+        List<string> ans = new List<string>();
+        int count = 0;
+        if(n>=0)
+        {
+            ans.Add("0");            
+            count++;
+        }
+        if(n>=1)
+        {
+            ans.Add("1");
+            count++;
+        }
+        while(count<=n)
+        {
+            List<string> newAns = new List<string>();
+            for(int i=0;i<ans.Count;i++)
+            {
+                //newAns.Add(ans[i].Insert(0,"0"));
+                newAns.Add("0"+ans[i]);
+            }
+            for(int i=ans.Count-1;i>=0;i--)
+            {
+                //newAns.Add(ans[i].Insert(0,"1"));
+                newAns.Add("1"+ans[i]);
+            }
+            ans = newAns;
+            count++;
+        }
+        List<int> res = new List<int>();
+        foreach(string s in ans)
+        {
+            res.Add(Convert.ToInt32(s,2));
+        }
+        return res;
+    }
+    
+        public IList<int> GrayCode_Wiki(int n) {
+        int max = (int)Math.Pow(2,n);
+        IList<int> ans = new List<int>();
+        for(int i=0;i<max;i++)
+        {
+            
+            ans.Add(i ^ (i>>1));
+        }
+        return ans;
+    }
+}
