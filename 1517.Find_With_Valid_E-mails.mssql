@@ -1,0 +1,7 @@
+/* Write your T-SQL query statement below */
+
+SELECT *
+From Users
+WHERE mail Like '[a-zA-Z]%@leetcode.com'
+
+AND left(mail,len(mail)-13) not like '%[^a-zA-Z0-9._-]%'
